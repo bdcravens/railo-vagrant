@@ -48,7 +48,9 @@ template "/var/lib/tomcat7/conf/web.xml" do
    group "tomcat7"
 end
 
-
+service "tomcat7" do
+  action [:enable, :start]
+end
 
 
 # copy index.cfm
@@ -91,14 +93,12 @@ template "/var/lib/tomcat7/conf/server.xml" do
 end
 
 # restart Tomcat
-# service "tomcat7" do
-#   action :restart
-# end
-
-
 service "tomcat7" do
-  action [:enable, :start]
+  action :restart
 end
+
+
+
 
 
 # run admin.cfm
