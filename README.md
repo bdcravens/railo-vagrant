@@ -33,6 +33,8 @@ This uses a very basic Chef recipe (Chef recipes are written in Ruby). Some cave
 
 Running it
 ----------
+This downloads the Ubuntu instance (only the first time), apt-get installs Tomcat, downloads and extracts Railo, configures Tomcat and Railo with defaults, and gives you a bare-bones index.cfm.
+
 <pre><code>git clone git@github.com:bdcravens/railo-vagrant.git
 cd railo-vagrant
 vagrant up</code></pre>
@@ -42,6 +44,15 @@ After it starts, verify it runs by opening http://testrailo.dev:8080. You should
 Making Changes
 --------------
 See cookbooks/attributes/default.rb (Yes, it's Ruby. You'll be fine.) If you want to perform more Tomcat or Railo config changes, see the respective files (server.xml.rb, web.xml.rb, or _admin.cfm.rb) in cookbooks/templates/default
+
+You will want to empty out the code directory (including WEB-INF) if you make any changes to the index.cfm or admin.cfm templates. To restart without redownloading things like Railo and Tomcat:
+
+<pre><code>vagrant reload</code></pre>
+
+To start over from scratch:
+
+<pre><code>vagrant destroy
+vagrant up</code></pre>
 
 Railo Admin
 -----------
