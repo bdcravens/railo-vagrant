@@ -71,3 +71,5 @@ Special thanks to ….
 * Nathan Mische - [he did the same thing for Railo Express](https://github.com/nmische/cookbooks)
 * Lew Goettner [He has a couple of CF related projects](https://github.com/lewg) Also, check out [his blog post](http://beacon.wharton.upenn.edu/404/2011/12/keeping-your-machine-clean-with-vagrant-chef)
 * Various contributors to my questions related to this on the Railo mailing list: Peter Boughton, Chris Blackwell, Denny
+
+
