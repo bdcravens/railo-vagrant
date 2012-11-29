@@ -41,6 +41,10 @@ vagrant up</code></pre>
 
 After it starts, verify it runs by opening http://testrailo.dev:8080. You should see a cfdump of server scope. (Note: you'll need to set up the hosts entry as above first, or whatever you've changed the values to in Vagrantfile and/or your attributes file)
 
+Railo Version
+-------------
+Originally written to load Railo 3.3.x. If you want to run Railo 4.0, rename cookbooks/main/recipes/default.rb to default.rb.old and rename railo4.rb to default.rb. (Modularizing this and making it easy to select version is a TODO)
+
 Making Changes
 --------------
 See cookbooks/attributes/default.rb (Yes, it's Ruby. You'll be fine.) If you want to perform more Tomcat or Railo config changes, see the respective files (server.xml.rb, web.xml.rb, or _admin.cfm.rb) in cookbooks/templates/default
