@@ -70,6 +70,15 @@ Where's the Adobe and OpenBD love? Why jars and not wars? etc
 -------------------------------------------------------------
 Could easily do this with all the above (though exact steps of setting password, making admin changes, etc, would vary) - the concepts are the same. Use this project as your starting point.
 
+
+Error Resolution
+-------------------------------------------------------------
+ - The host class is reporting that NFS is not supported by this host,
+or `nfsd` may not be installed. Please verify that `nfsd` is installed
+on your machine, and retry.
+
+    $ sudo apt-get install nfs-kernel-server
+
 Special thanks to ….
 --------------------
 * Nathan Mische - [he did the same thing for Railo Express](https://github.com/nmische/cookbooks)
