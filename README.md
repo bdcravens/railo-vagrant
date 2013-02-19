@@ -84,7 +84,7 @@ Error Resolution
     Please open the VirtualBox GUI and attempt to boot the virtual machine
     manually to get a more informative error message.
 ### resolution
-    n
+    not resolved
 
 Special thanks to ….
 --------------------
