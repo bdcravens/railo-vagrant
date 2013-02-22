@@ -27,6 +27,7 @@ end
 # install git for source control
 # package "git-core"
 
+package "zip"
 package "vim"
 
 # Download Railo JARs (http://www.getrailo.org/index.cfm/download/)
@@ -128,15 +129,17 @@ file "/var/www-code/_admin.cfm" do
 end
 
 # add your framework option
+
 if node.attribute?('coldfusion_framework')
-  package "zip"
+  directory "/tmp" do
+      action :create
+  end
 
   case "#{node[:coldfusion_framework]}"
   when "coldbox"
     execute "wget -O /tmp/framework.zip http://www.coldbox.org/download/coldbox/standalone/true" do
       action :run
       user "root"
-      cwd "/tmp"
     end
   when "fw1"
     #to this git://github.com/seancorfield/fw1.git
@@ -144,7 +147,6 @@ if node.attribute?('coldfusion_framework')
     execute "wget -O /tmp/framework.zip http://cfwheels.org/download/latest-version" do
       action :run
       user "root"
-      cwd "/tmp"
     end
     #to wget http://cfwheels.org/download/latest-version
   end
