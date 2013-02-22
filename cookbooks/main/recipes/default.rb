@@ -157,7 +157,7 @@ if node.attribute?('coldfusion_framework')
   end
 
   # untar it
-  execute "unzip framework.zip -d /vagrant/code" do
+  execute "unzip -o framework.zip -d /vagrant/code" do
     creates "code"
     action :run
     user "root"
