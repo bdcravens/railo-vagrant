@@ -3,6 +3,17 @@ execute "apt-get update" do
   action :run
 end
 
+# Make sure Ubuntu upgraded
+execute "apt-get upgrade -y" do
+  command "apt-get upgrade -y"
+  action :run
+end
+
+# install git
+package "git-core" do
+  action :install
+end
+
 # install Tomcat
 package "tomcat7" do
 	action :install
@@ -78,12 +89,6 @@ template "/etc/hosts" do
    group "root"
 end
 
-
-
-
-
-
-
 # copy server.xml
 template "/var/lib/tomcat7/conf/server.xml" do
    source "server.xml.erb"
@@ -96,10 +101,6 @@ end
 service "tomcat7" do
   action :restart
 end
-
-
-
-
 
 # run admin.cfm
 http_request "null" do
@@ -116,11 +117,6 @@ end
 
 # left some specific steps you might want for you app in - commented out below
 
-
-# ensure git installed
-#package "git"
-
-
 # copy ColdBox to /tmp so we can work with it
 # directory "/tmp/coldbox" do
 # 	action :create
@@ -131,6 +127,5 @@ end
 #   action :sync
 # end
 
-
-
-
+# include recipe "mysql::server"
+# include recipe "apache2::mod_proxy_ajp"
