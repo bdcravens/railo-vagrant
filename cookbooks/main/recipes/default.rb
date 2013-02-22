@@ -139,7 +139,7 @@ end
 
 if node.attribute?('coldfusion_framework')
 
-  case node[:platform]
+  case node[:coldfusion_framework]
   when "coldbox"
     directory "/tmp/coldbox" do
       action :create
