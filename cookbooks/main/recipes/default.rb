@@ -27,8 +27,7 @@ end
 
 # install git for source control
 package "git-core"
-
-# install vim editor
+package "zip"
 package "vim"
 
 # Download Railo JARs (http://www.getrailo.org/index.cfm/download/)
@@ -135,23 +134,47 @@ execute "rm" do
   action :run
 end
 
-# left some specific steps you might want for you app in - commented out below
+# add your framework option
 
 if node.attribute?('coldfusion_framework')
-
-  case node[:coldfusion_framework]
-  when "coldbox"
-    directory "/tmp/coldbox" do
+  directory "/tmp" do
       action :create
-    end
-    git "/tmp/coldbox" do
-      repository "git://github.com/ColdBox/coldbox-platform.git"
-      reference "master"
-      action :sync
+  end
+  case "#{node[:coldfusion_framework]}"
+  when "coldbox"
+    execute "wget -O /tmp/framework.zip http://www.coldbox.org/download/coldbox/standalone/true" do
+      action :run
+      user "root"
     end
   when "fw1"
-    # do this
+    #to this git://github.com/seancorfield/fw1.git
   when "cfwheels"
-    # do this
-  end 
+    execute "wget -O /tmp/framework.zip http://cfwheels.org/download/latest-version" do
+      action :run
+      user "root"
+    end
+    #to wget http://cfwheels.org/download/latest-version
+  end
+
+  # untar it
+  execute "unzip framework.zip -d /vagrant/code" do
+    creates "code"
+    action :run
+    user "root"
+    cwd "/tmp"
+  end
+
+  # set permissions
+  execute "chown -R 777 code" do
+    action :run
+    user "root"
+    cwd "/vagrant"
+  end
+
+  # remove archive from install folder
+execute "rm" do
+  command "rm -i /tmp/framework.zip" 
+  action :run
+end
+
 end

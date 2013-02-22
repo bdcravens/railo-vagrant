@@ -1,4 +1,4 @@
 {
 	"tomcat_version": ["tomcat7"]
-	, "coldfusion_framework": ["coldbox"]
+	, "coldfusion_framework": ["cfwheels"]
 }
