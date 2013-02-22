@@ -166,5 +166,3 @@ if node.attribute?('coldfusion_framework')
     cwd "/vagrant"
   end
 end
-
-end
