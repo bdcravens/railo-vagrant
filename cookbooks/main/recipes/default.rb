@@ -21,12 +21,12 @@ package "#{node[:tomcat_version]}" do
 end
 
 # include_recipe "tomcat::default"
-
 # include_recipe "mysql"
 # include_recipe "mysql::server"
 
 # install git for source control
-package "git-core"
+# package "git-core"
+
 package "zip"
 package "vim"
 
@@ -40,7 +40,7 @@ remote_file "/tmp/railo-3.3.4.003-jars.tar.gz" do
 end
 
 # untar it
-execute "tar xvzf railo-3.3.4.003-jars.tar.gz" do
+execute "tar xvzf railo-#{node[:railo_version]}-jars.tar.gz" do
   creates "railo-3.3.4.003-jars"
   action :run
   user "root"
