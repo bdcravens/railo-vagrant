@@ -1,5 +1,5 @@
 # Make sure Ubuntu up-to-date
-# execute "apt-get update" 
+execute "apt-get update" 
 
 # execute "apt-get upgrade -y"
 
@@ -107,6 +107,11 @@ template "/var/lib/#{node[:tomcat_version]}/conf/server.xml" do
    group "#{node[:tomcat_version]}"
 end
 
+# restart Apache
+service "apache2" do
+  action :restart
+end
+
 # restart Tomcat
 service "#{node[:tomcat_version]}" do
   action :restart
@@ -129,6 +134,7 @@ if node.attribute?('coldfusion_framework')
   directory "/tmp" do
       action :create
   end
+
   case "#{node[:coldfusion_framework]}"
   when "coldbox"
     execute "wget -O /tmp/framework.zip http://www.coldbox.org/download/coldbox/standalone/true" do
