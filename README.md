@@ -18,8 +18,6 @@ This project uses Vagrant + Chef to create a VM with the following:
 * Railo (currently 3.3)
 * shared folder inside of your VM for developing your code
 
-
-
 This uses a very basic Chef recipe (Chef recipes are written in Ruby). Some caveats
 
 * Most Chef best practices indicate using separate recipes for different steps - I've put it all in one
@@ -29,15 +27,15 @@ This uses a very basic Chef recipe (Chef recipes are written in Ruby). Some cave
 * Designed for Ubuntu (though _should_ work for other distros)
 * Doesn't configure your "hosts" file on host machine, since this could theoretically be run on Windows, Mac, or Linux. For the default settings, you'd change your hosts file (/etc/hosts or c:\windows\system32\drivers\etc\hosts):
 
-<pre><code>192.168.33.10	testrailo.dev</code></pre>
+    192.168.33.10	testrailo.dev
 
 Running it
 ----------
 This downloads the Ubuntu instance (only the first time), apt-get installs Tomcat, downloads and extracts Railo, configures Tomcat and Railo with defaults, and gives you a bare-bones index.cfm.
 
-<pre><code>git clone git@github.com:bdcravens/railo-vagrant.git
-cd railo-vagrant
-vagrant up</code></pre>
+    $ git clone git@github.com:bdcravens/railo-vagrant.git
+    $ cd railo-vagrant
+    $ vagrant up 
 
 After it starts, verify it runs by opening http://testrailo.dev:8080. You should see a cfdump of server scope. (Note: you'll need to set up the hosts entry as above first, or whatever you've changed the values to in Vagrantfile and/or your attributes file)
 
@@ -51,12 +49,12 @@ See cookbooks/attributes/default.rb (Yes, it's Ruby. You'll be fine.) If you wan
 
 You will want to empty out the code directory (including WEB-INF) if you make any changes to the index.cfm or admin.cfm templates. To restart without redownloading things like Railo and Tomcat:
 
-<pre><code>vagrant reload</code></pre>
+    $ vagrant reload
 
 To start over from scratch:
 
-<pre><code>vagrant destroy
-vagrant up</code></pre>
+    $ vagrant destroy
+    $ vagrant up
 
 Railo Admin
 -----------
@@ -69,6 +67,24 @@ I'm an expert at a few things, and a hack at most. Feel free to make changes and
 Where's the Adobe and OpenBD love? Why jars and not wars? etc
 -------------------------------------------------------------
 Could easily do this with all the above (though exact steps of setting password, making admin changes, etc, would vary) - the concepts are the same. Use this project as your starting point.
+
+
+Error Resolution
+-------------------------------------------------------------
+### error
+    The host class is reporting that NFS is not supported by this host,
+    or `nfsd` may not be installed. Please verify that `nfsd` is installed
+    on your machine, and retry.
+### resolution
+    $ sudo apt-get install nfs-kernel-server
+
+### error
+    The VM failed to remain in the "running" state while attempting to boot.
+    This is normally caused by a misconfiguration or host system incompatibilities.
+    Please open the VirtualBox GUI and attempt to boot the virtual machine
+    manually to get a more informative error message.
+### resolution
+    not resolved
 
 Special thanks to ….
 --------------------

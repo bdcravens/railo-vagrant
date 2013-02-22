@@ -46,8 +46,6 @@ Vagrant::Config.run do |config|
   # folder, and the third is the path on the host to the actual folder.
   config.vm.share_folder "code", "/var/www-code", "./code", :nfs=>true
 
-  
-
   # Enable provisioning with chef solo, specifying a cookbooks path, roles
   # path, and data_bags path (all relative to this Vagrantfile), and adding 
   # some recipes and/or roles.
@@ -60,13 +58,11 @@ Vagrant::Config.run do |config|
     #chef.add_role "web"
   
     # You may also specify custom JSON attributes:
-    #chef.json = { :mysql_password => "foo" }
+    chef.json = JSON.parse(File.read("cookbooks/node.json")) 
   end
-
 
   # hack to allow symlinks 
   # https://github.com/mitchellh/vagrant/issues/713
   # config.vm.customize ["setextradata", :id, "VBoxInternal2/SharedFoldersEnableSymlinksCreate/v-root", "1"]
-
 
 end
