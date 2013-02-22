@@ -27,9 +27,6 @@ end
 # install git for source control
 # package "git-core"
 
-package "zip"
-package "vim"
-
 # Download Railo JARs (http://www.getrailo.org/index.cfm/download/)
 remote_file "/tmp/railo-3.3.4.003-jars.tar.gz" do
   source "http://www.getrailo.org/railo/remote/download/3.3.4.003/custom/all/railo-3.3.4.003-jars.tar.gz"
@@ -49,30 +46,22 @@ end
 
 # set jar permissions
 execute "chown #{node[:tomcat_version]}:#{node[:tomcat_version]} . -R" do
-	action :run
-	user "root"
-	cwd "/tmp/railo-3.3.4.003-jars"
+  action :run
+  user "root"
+  cwd "/tmp/railo-3.3.4.003-jars"
 end
 
 # move jars to tomcat
 execute "mv * /var/lib/#{node[:tomcat_version]}/common" do
-	action :run
-	creates "/var/lib/#{node[:tomcat_version]}/common/railo.jar"
-	user "root"
-	cwd "/tmp/railo-3.3.4.003-jars"
+  action :run
+  creates "/var/lib/#{node[:tomcat_version]}/common/railo.jar"
+  user "root"
+  cwd "/tmp/railo-3.3.4.003-jars"
 end
 
 # update Tomcat web.xml
 template "/var/lib/#{node[:tomcat_version]}/conf/web.xml" do
    source "web.xml.erb"
-   mode 0644
-   owner "root"
-   group "#{node[:tomcat_version]}"
-end
-
-# copy server.xml
-template "/var/lib/#{node[:tomcat_version]}/conf/server.xml" do
-   source "server.xml.erb"
    mode 0644
    owner "root"
    group "#{node[:tomcat_version]}"
@@ -107,15 +96,25 @@ template "/etc/hosts" do
    group "root"
 end
 
+# copy server.xml
+template "/var/lib/#{node[:tomcat_version]}/conf/server.xml" do
+   source "server.xml.erb"
+   mode 0644
+   owner "root"
+   group "#{node[:tomcat_version]}"
+end
+
 # restart Apache
-# service "apache2" do
-#  action :restart
-# end
+service "apache2" do
+  action :restart
+end
 
 # restart Tomcat
-# service "#{node[:tomcat_version]}" do
-#  action :restart
-# end
+service "#{node[:tomcat_version]}" do
+  action :restart
+end
+
+package "vim"
 
 # run admin.cfm
 http_request "null" do
@@ -129,17 +128,15 @@ file "/var/www-code/_admin.cfm" do
 end
 
 # add your framework option
-
 if node.attribute?('coldfusion_framework')
-  directory "/tmp" do
-      action :create
-  end
+  package "zip"
 
   case "#{node[:coldfusion_framework]}"
   when "coldbox"
     execute "wget -O /tmp/framework.zip http://www.coldbox.org/download/coldbox/standalone/true" do
       action :run
       user "root"
+      cwd "/tmp"
     end
   when "fw1"
     #to this git://github.com/seancorfield/fw1.git
@@ -147,6 +144,7 @@ if node.attribute?('coldfusion_framework')
     execute "wget -O /tmp/framework.zip http://cfwheels.org/download/latest-version" do
       action :run
       user "root"
+      cwd "/tmp"
     end
     #to wget http://cfwheels.org/download/latest-version
   end
