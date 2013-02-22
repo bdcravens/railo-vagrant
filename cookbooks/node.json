@@ -1,0 +1,4 @@
+{
+	"tomcat_version": ["tomcat7"]
+	, "coldfusion_framework": ["cfwheels"]
+}
