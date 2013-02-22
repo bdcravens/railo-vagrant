@@ -1,23 +1,35 @@
 # Make sure Ubuntu up-to-date
-execute "apt-get update" do
-  action :run
-end
+execute "apt-get update" 
 
-# Make sure Ubuntu upgraded
-execute "apt-get upgrade -y" do
-  command "apt-get upgrade -y"
-  action :run
-end
+# execute "apt-get upgrade -y"
 
-# install git
-package "git-core" do
-  action :install
+# include_recipe "java:oracle"
+
+include_recipe "apache2"
+include_recipe "apache2::mod_proxy"
+apache_module "proxy_ajp"
+
+web_app "my_site" do
+  template "mysite.conf.erb"
+  #example of passing in a parameter
+  server_name node['hostname']
 end
 
 # install Tomcat
-package "tomcat7" do
-	action :install
+package "#{node[:tomcat_version]}" do
+  action :install
 end
+
+# include_recipe "tomcat::default"
+
+# include_recipe "mysql"
+# include_recipe "mysql::server"
+
+# install git for source control
+package "git-core"
+
+# install vim editor
+package "vim"
 
 # Download Railo JARs (http://www.getrailo.org/index.cfm/download/)
 remote_file "/tmp/railo-3.3.4.003-jars.tar.gz" do
@@ -37,32 +49,31 @@ execute "tar xvzf railo-3.3.4.003-jars.tar.gz" do
 end
 
 # set jar permissions
-execute "chown tomcat7:tomcat7 . -R" do
+execute "chown #{node[:tomcat_version]}:#{node[:tomcat_version]} . -R" do
 	action :run
 	user "root"
 	cwd "/tmp/railo-3.3.4.003-jars"
 end
 
 # move jars to tomcat
-execute "mv * /var/lib/tomcat7/common" do
+execute "mv * /var/lib/#{node[:tomcat_version]}/common" do
 	action :run
-	creates "/var/lib/tomcat7/common/railo.jar"
+	creates "/var/lib/#{node[:tomcat_version]}/common/railo.jar"
 	user "root"
 	cwd "/tmp/railo-3.3.4.003-jars"
 end
 
 # update Tomcat web.xml
-template "/var/lib/tomcat7/conf/web.xml" do
+template "/var/lib/#{node[:tomcat_version]}/conf/web.xml" do
    source "web.xml.erb"
    mode 0644
    owner "root"
-   group "tomcat7"
+   group "#{node[:tomcat_version]}"
 end
 
-service "tomcat7" do
+service "#{node[:tomcat_version]}" do
   action [:enable, :start]
 end
-
 
 # copy index.cfm
 template "/var/www-code/index.cfm" do
@@ -90,23 +101,27 @@ template "/etc/hosts" do
 end
 
 # copy server.xml
-template "/var/lib/tomcat7/conf/server.xml" do
+template "/var/lib/#{node[:tomcat_version]}/conf/server.xml" do
    source "server.xml.erb"
    mode 0644
    owner "root"
-   group "tomcat7"
+   group "#{node[:tomcat_version]}"
+end
+
+# restart Apache
+service "apache2" do
+  action :restart
 end
 
 # restart Tomcat
-service "tomcat7" do
+service "#{node[:tomcat_version]}" do
   action :restart
 end
 
 # run admin.cfm
 http_request "null" do
-  url "http://#{node[:railo][:hostname]}:8080/_admin.cfm"
+  url "http://#{node[:railo][:hostname]}/_admin.cfm"
 end
-
 
 # delete _admin.cfm
 file "/var/www-code/_admin.cfm" do
@@ -114,18 +129,29 @@ file "/var/www-code/_admin.cfm" do
   user "root"
 end
 
+# remove archive from install folder
+execute "rm" do
+  command "rm -i /tmp/railo-3.3.4.003-jars.tar.gz" 
+  action :run
+end
 
 # left some specific steps you might want for you app in - commented out below
 
-# copy ColdBox to /tmp so we can work with it
-# directory "/tmp/coldbox" do
-# 	action :create
-# end
-# git "/tmp/coldbox" do
-#   repository "git://github.com/ColdBox/coldbox-platform.git"
-#   reference "master"
-#   action :sync
-# end
+if node.attribute?('coldfusion_framework')
 
-# include recipe "mysql::server"
-# include recipe "apache2::mod_proxy_ajp"
+  case node[:platform]
+  when "coldbox"
+    directory "/tmp/coldbox" do
+      action :create
+    end
+    git "/tmp/coldbox" do
+      repository "git://github.com/ColdBox/coldbox-platform.git"
+      reference "master"
+      action :sync
+    end
+  when "fw1"
+    # do this
+  when "cfwheels"
+    # do this
+  end 
+end
