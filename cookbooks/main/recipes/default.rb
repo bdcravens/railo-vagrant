@@ -69,6 +69,14 @@ template "/var/lib/#{node[:tomcat_version]}/conf/web.xml" do
    group "#{node[:tomcat_version]}"
 end
 
+# copy server.xml
+template "/var/lib/#{node[:tomcat_version]}/conf/server.xml" do
+   source "server.xml.erb"
+   mode 0644
+   owner "root"
+   group "#{node[:tomcat_version]}"
+end
+
 service "#{node[:tomcat_version]}" do
   action [:enable, :start]
 end
@@ -98,23 +106,15 @@ template "/etc/hosts" do
    group "root"
 end
 
-# copy server.xml
-template "/var/lib/#{node[:tomcat_version]}/conf/server.xml" do
-   source "server.xml.erb"
-   mode 0644
-   owner "root"
-   group "#{node[:tomcat_version]}"
-end
-
 # restart Apache
-service "apache2" do
-  action :restart
-end
+# service "apache2" do
+#  action :restart
+# end
 
 # restart Tomcat
-service "#{node[:tomcat_version]}" do
-  action :restart
-end
+# service "#{node[:tomcat_version]}" do
+#  action :restart
+# end
 
 # run admin.cfm
 http_request "null" do
