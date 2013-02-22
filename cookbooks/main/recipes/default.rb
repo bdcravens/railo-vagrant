@@ -1,5 +1,5 @@
 # Make sure Ubuntu up-to-date
-execute "apt-get update" 
+# execute "apt-get update" 
 
 # execute "apt-get upgrade -y"
 
@@ -107,11 +107,6 @@ template "/var/lib/#{node[:tomcat_version]}/conf/server.xml" do
    group "#{node[:tomcat_version]}"
 end
 
-# restart Apache
-service "apache2" do
-  action :restart
-end
-
 # restart Tomcat
 service "#{node[:tomcat_version]}" do
   action :restart
@@ -126,12 +121,6 @@ end
 file "/var/www-code/_admin.cfm" do
   action :delete
   user "root"
-end
-
-# remove archive from install folder
-execute "rm" do
-  command "rm -i /tmp/railo-3.3.4.003-jars.tar.gz" 
-  action :run
 end
 
 # add your framework option
@@ -170,11 +159,6 @@ if node.attribute?('coldfusion_framework')
     user "root"
     cwd "/vagrant"
   end
-
-  # remove archive from install folder
-execute "rm" do
-  command "rm -i /tmp/framework.zip" 
-  action :run
 end
 
 end
