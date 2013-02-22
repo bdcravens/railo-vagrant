@@ -108,9 +108,9 @@ template "/var/lib/#{node[:tomcat_version]}/conf/server.xml" do
 end
 
 # restart Apache
-# service "apache2" do
-#   action :restart
-# end
+service "apache2" do
+  action :restart
+end
 
 # restart Tomcat
 service "#{node[:tomcat_version]}" do
