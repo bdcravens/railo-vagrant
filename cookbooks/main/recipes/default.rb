@@ -1,9 +1,22 @@
-# Make sure Ubuntu up-to-date
-execute "apt-get update" 
+# Run apt-get update to create the stamp file
+execute "apt-get-update" do
+  command "apt-get update"
+  ignore_failure true
+  not_if do ::File.exists?('/var/lib/apt/periodic/update-success-stamp') end
+  action :nothing
+end
 
-# execute "apt-get upgrade -y"
+# For other recipes to call to force an update
+execute "apt-get update" do
+  command "apt-get update"
+  ignore_failure true
+  action :nothing
+end
 
-# include_recipe "java:oracle"
+# provides /var/lib/apt/periodic/update-success-stamp on apt-get update
+package "update-notifier-common" do
+  notifies :run, resources(:execute => "apt-get-update"), :immediately
+end
 
 include_recipe "apache2"
 include_recipe "apache2::mod_proxy"
