@@ -34,6 +34,7 @@ Running it
 This downloads the Ubuntu instance (only the first time), apt-get installs Tomcat, downloads and extracts Railo, configures Tomcat and Railo with defaults, and gives you a bare-bones index.cfm.
 
     $ git clone git@github.com:bdcravens/railo-vagrant.git
+    $ git submodule init
     $ cd railo-vagrant
     $ vagrant up 
 
