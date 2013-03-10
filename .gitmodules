@@ -1,3 +1,18 @@
 [submodule "cookbooks/java"]
 	path = cookbooks/java
 	url = https://github.com/opscode-cookbooks/java.git
+[submodule "cookbooks/apache2"]
+	path = cookbooks/apache2
+	url = https://github.com/opscode-cookbooks/apache2.git
+[submodule "cookbooks/mysql"]
+	path = cookbooks/mysql
+	url = https://github.com/opscode-cookbooks/mysql.git
+[submodule "cookbooks/tomcat"]
+	path = cookbooks/tomcat
+	url = https://github.com/opscode-cookbooks/tomcat.git
+[submodule "cookbooks/openssl"]
+	path = cookbooks/openssl
+	url = https://github.com/opscode-cookbooks/openssl.git
+[submodule "cookbooks/build-essential"]
+	path = cookbooks/build-essential
+	url = https://github.com/opscode-cookbooks/build-essential.git
