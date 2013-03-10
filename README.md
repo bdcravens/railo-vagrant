@@ -38,7 +38,7 @@ This downloads the Ubuntu instance (only the first time), apt-get installs Tomca
     $ cd railo-vagrant
     $ vagrant up 
 
-After it starts, verify it runs by opening http://testrailo.dev:8080. You should see a cfdump of server scope. (Note: you'll need to set up the hosts entry as above first, or whatever you've changed the values to in Vagrantfile and/or your attributes file)
+After it starts, verify it runs by opening http://testrailo.dev . You should see a cfdump of server scope. (Note: you'll need to set up the hosts entry as above first, or whatever you've changed the values to in Vagrantfile and/or your attributes file)
 
 Railo Version
 -------------
@@ -59,7 +59,7 @@ To start over from scratch:
 
 Railo Admin
 -----------
-Usual location (http://testrailo.dev:8080/railo-context/admin/server.cfm or web.cfm). Passwords: in cookbooks/attributes/default.rb (defaults to railoserver and railoweb)
+Usual location (http://testrailo.dev/railo-context/admin/server.cfm or web.cfm). Passwords: in cookbooks/attributes/default.rb (defaults to railoserver and railoweb)
 
 Hey Billy, you're an idiot because you ….
 -----------------------------------------
