@@ -80,6 +80,8 @@ Error Resolution
     on your machine, and retry.
 ### resolution
     $ sudo apt-get install nfs-kernel-server
+    
+    http://devblog.alexsapps.com/2012/11/solution-to-vagrant-up-host-class-is.html
 
 Special thanks to ….
 --------------------
