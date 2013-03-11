@@ -35,6 +35,7 @@ This downloads the Ubuntu instance (only the first time), apt-get installs Tomca
 
     $ git clone git@github.com:bdcravens/railo-vagrant.git
     $ git submodule init
+    $ git submodule update
     $ cd railo-vagrant
     $ vagrant up 
 

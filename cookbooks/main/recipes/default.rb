@@ -27,6 +27,11 @@ execute "apt-get-update-periodic" do
   end
 end
 
+include_recipe "mysql::server"
+# include_recipe "tomcat::default"
+include_recipe "database::mysql"
+include_recipe 'git'
+include_recipe 'vim'
 include_recipe "apache2"
 include_recipe "apache2::mod_proxy"
 apache_module "proxy_ajp"
@@ -42,21 +47,11 @@ package "#{node[:tomcat_version]}" do
   action :install
 end
 
-include_recipe "mysql::server"
-
-# include_recipe "tomcat::default"
-
-include_recipe "database::mysql"
-
 # create a mysql database
 mysql_database 'oracle_rules' do
   connection ({:host => "localhost", :username => 'root', :password => node['mysql']['server_root_password']})
   action :create
 end
-
-# install git for source control
-package "git-core"
-package "vim"
 
 # Download Railo JARs (http://www.getrailo.org/index.cfm/download/)
 remote_file "/tmp/railo-#{node[:railo_version]}-jars.tar.gz" do
