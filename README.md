@@ -59,7 +59,8 @@ To start over from scratch:
 
 Railo Admin
 -----------
-Usual location (http://testrailo.dev/railo-context/admin/server.cfm or web.cfm). Passwords: in cookbooks/attributes/default.rb (defaults to railoserver and railoweb)
+Usual location (http://testrailo.dev/railo-context/admin/server.cfm or web.cfm). 
+ - Passwords: in cookbooks/attributes/default.rb (defaults to railoserver and railoweb)
 
 Hey Billy, you're an idiot because you ….
 -----------------------------------------
@@ -78,14 +79,6 @@ Error Resolution
     on your machine, and retry.
 ### resolution
     $ sudo apt-get install nfs-kernel-server
-
-### error
-    The VM failed to remain in the "running" state while attempting to boot.
-    This is normally caused by a misconfiguration or host system incompatibilities.
-    Please open the VirtualBox GUI and attempt to boot the virtual machine
-    manually to get a more informative error message.
-### resolution
-    not resolved
 
 Special thanks to ….
 --------------------
