@@ -79,9 +79,14 @@ Error Resolution
     or `nfsd` may not be installed. Please verify that `nfsd` is installed
     on your machine, and retry.
 ### resolution
+#### linux
     $ sudo apt-get install nfs-kernel-server
+
+#### windows
+Change the vagrantfile so you use virtualbox's shared folders instead of nfs, by setting nfs=>false:
+config.vm.share_folder "blah", "~/blah", ".", :extra => 'dmode=755,fmode=644', :nfs => false
     
-    http://devblog.alexsapps.com/2012/11/solution-to-vagrant-up-host-class-is.html
+http://devblog.alexsapps.com/2012/11/solution-to-vagrant-up-host-class-is.html
 
 Special thanks to ….
 --------------------
