@@ -22,3 +22,12 @@
 [submodule "cookbooks/git"]
 	path = cookbooks/git
 	url = https://github.com/opscode-cookbooks/git.git
+[submodule "cookbooks/database"]
+	path = cookbooks/database
+	url = https://github.com/opscode-cookbooks/database.git
+[submodule "cookbooks/nfs"]
+	path = cookbooks/nfs
+	url = https://github.com/atomic-penguin/cookbook-nfs.git
+[submodule "cookbooks/line"]
+	path = cookbooks/line
+	url = https://github.com/someara/line-cookbook.git
