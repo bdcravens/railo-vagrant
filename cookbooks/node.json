@@ -1,4 +1,10 @@
 {
 	  "tomcat_version": ["tomcat7"]
 	, "railo_version": ["3.3.4.003"]
+	, "mysql": {
+    "server_root_password": "railodb",
+    "server_repl_password": "railodb",
+    "server_debian_password": "railodb"
+  }
 }
+

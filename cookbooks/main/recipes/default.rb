@@ -42,48 +42,53 @@ package "#{node[:tomcat_version]}" do
   action :install
 end
 
+include_recipe "mysql::server"
+
 # include_recipe "tomcat::default"
-# include_recipe "mysql"
-# include_recipe "mysql::server"
+
+include_recipe "database::mysql"
+
+# create a mysql database
+mysql_database 'oracle_rules' do
+  connection ({:host => "localhost", :username => 'root', :password => node['mysql']['server_root_password']})
+  action :create
+end
 
 # install git for source control
-# package "git-core"
+package "git-core"
 package "vim"
 
-# if !File.exists?("/tmp/railo-#{node[:railo_version]}-jars.tar.gz")
-
-  # Download Railo JARs (http://www.getrailo.org/index.cfm/download/)
-  remote_file "/tmp/railo-#{node[:railo_version]}-jars.tar.gz" do
-    source "http://www.getrailo.org/railo/remote/download/#{node[:railo_version]}/custom/all/railo-#{node[:railo_version]}-jars.tar.gz"
-    action :create_if_missing
-    mode "0744"
-    owner "root"
-    group "root"
-  end
+# Download Railo JARs (http://www.getrailo.org/index.cfm/download/)
+remote_file "/tmp/railo-#{node[:railo_version]}-jars.tar.gz" do
+  source "http://www.getrailo.org/railo/remote/download/#{node[:railo_version]}/custom/all/railo-#{node[:railo_version]}-jars.tar.gz"
+  action :create_if_missing
+  mode "0744"
+  owner "root"
+  group "root"
+end
     
-  # untar it
-  execute "tar xvzf railo-#{node[:railo_version]}-jars.tar.gz" do
-    creates "railo-#{node[:railo_version]}-jars"
-    action :run
-    user "root"
-    cwd "/tmp"
-  end
+# untar it
+execute "tar xvzf railo-#{node[:railo_version]}-jars.tar.gz" do
+  creates "railo-#{node[:railo_version]}-jars"
+  action :run
+  user "root"
+  cwd "/tmp"
+end
 
-  # set jar permissions
-  execute "chown #{node[:tomcat_version]}:#{node[:tomcat_version]} . -R" do
-    action :run
-    user "root"
-    cwd "/tmp/railo-#{node[:railo_version]}-jars"
-  end
+# set jar permissions
+execute "chown #{node[:tomcat_version]}:#{node[:tomcat_version]} . -R" do
+  action :run
+  user "root"
+  cwd "/tmp/railo-#{node[:railo_version]}-jars"
+end
 
-  # move jars to tomcat
-  execute "mv * /var/lib/#{node[:tomcat_version]}/common" do
-    action :run
-    creates "/var/lib/#{node[:tomcat_version]}/common/railo.jar"
-    user "root"
-    cwd "/tmp/railo-#{node[:railo_version]}-jars"
-  end
-# end
+# move jars to tomcat
+execute "mv * /var/lib/#{node[:tomcat_version]}/common" do
+  action :run
+  creates "/var/lib/#{node[:tomcat_version]}/common/railo.jar"
+  user "root"
+  cwd "/tmp/railo-#{node[:railo_version]}-jars"
+end
 
 # update Tomcat web.xml
 template "/var/lib/#{node[:tomcat_version]}/conf/web.xml" do
