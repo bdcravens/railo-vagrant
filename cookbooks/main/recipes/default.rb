@@ -43,7 +43,7 @@ web_app "my_site" do
 end
 
 # install Tomcat
-package "#{node[:tomcat_version]}" do
+package "tomcat#{node[:tomcat_version]}" do
   action :install
 end
 
@@ -71,29 +71,29 @@ execute "tar xvzf railo-#{node[:railo_version]}-jars.tar.gz" do
 end
 
 # set jar permissions
-execute "chown #{node[:tomcat_version]}:#{node[:tomcat_version]} . -R" do
+execute "chown tomcat#{node[:tomcat_version]}:tomcat#{node[:tomcat_version]} . -R" do
   action :run
   user "root"
   cwd "/tmp/railo-#{node[:railo_version]}-jars"
 end
 
 # move jars to tomcat
-execute "mv * /var/lib/#{node[:tomcat_version]}/common" do
+execute "mv * /var/lib/tomcat#{node[:tomcat_version]}/common" do
   action :run
-  creates "/var/lib/#{node[:tomcat_version]}/common/railo.jar"
+  creates "/var/lib/tomcat#{node[:tomcat_version]}/common/railo.jar"
   user "root"
   cwd "/tmp/railo-#{node[:railo_version]}-jars"
 end
 
 # update Tomcat web.xml
-template "/var/lib/#{node[:tomcat_version]}/conf/web.xml" do
+template "/var/lib/tomcat#{node[:tomcat_version]}/conf/web.xml" do
    source "web.xml.erb"
    mode 0644
    owner "root"
-   group "#{node[:tomcat_version]}"
+   group "tomcat#{node[:tomcat_version]}"
 end
 
-service "#{node[:tomcat_version]}" do
+service "tomcat#{node[:tomcat_version]}" do
   action [:enable, :start]
 end
 
@@ -123,11 +123,11 @@ template "/etc/hosts" do
 end
 
 # copy server.xml
-template "/var/lib/#{node[:tomcat_version]}/conf/server.xml" do
+template "/var/lib/tomcat#{node[:tomcat_version]}/conf/server.xml" do
    source "server.xml.erb"
    mode 0644
    owner "root"
-   group "#{node[:tomcat_version]}"
+   group "tomcat#{node[:tomcat_version]}"
 end
 
 # restart Apache
@@ -136,7 +136,7 @@ service "apache2" do
 end
 
 # restart Tomcat
-service "#{node[:tomcat_version]}" do
+service "tomcat#{node[:tomcat_version]}" do
   action :restart
 end
 
