@@ -25,6 +25,9 @@ This uses a very basic Chef recipe (Chef recipes are written in Ruby). Some cave
 * It's a JAR-based deployment for Railo
 * The Linux file permissions could possibly be tweaked 
 * Designed for Ubuntu (though _should_ work for other distros)
+
+Configure Host
+--------------
 * Doesn't configure your "hosts" file on host machine, since this could theoretically be run on Windows, Mac, or Linux. For the default settings, you'd change your hosts file (/etc/hosts or c:\windows\system32\drivers\etc\hosts):
 
     192.168.33.10	testrailo.dev
