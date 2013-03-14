@@ -1,10 +1,37 @@
-# Make sure Ubuntu up-to-date
-execute "apt-get update" 
+# Run apt-get update to create the stamp file
+execute "apt-get-update" do
+  command "apt-get update"
+  ignore_failure true
+  not_if do ::File.exists?('/var/lib/apt/periodic/update-success-stamp') end
+  action :nothing
+end
 
-# execute "apt-get upgrade -y"
+# For other recipes to call to force an update
+execute "apt-get update" do
+  command "apt-get update"
+  ignore_failure true
+  action :nothing
+end
 
-# include_recipe "java:oracle"
+# provides /var/lib/apt/periodic/update-success-stamp on apt-get update
+package "update-notifier-common" do
+  notifies :run, resources(:execute => "apt-get-update"), :immediately
+end
 
+execute "apt-get-update-periodic" do
+  command "apt-get update"
+  ignore_failure true
+  only_if do
+    File.exists?('/var/lib/apt/periodic/update-success-stamp') &&
+    File.mtime('/var/lib/apt/periodic/update-success-stamp') < Time.now - 86400
+  end
+end
+
+include_recipe "mysql::server"
+# include_recipe "tomcat::default"
+include_recipe "database::mysql"
+include_recipe 'git'
+include_recipe 'vim'
 include_recipe "apache2"
 include_recipe "apache2::mod_proxy"
 apache_module "proxy_ajp"
@@ -16,62 +43,57 @@ web_app "my_site" do
 end
 
 # install Tomcat
-package "#{node[:tomcat_version]}" do
+package "tomcat#{node[:tomcat_version]}" do
   action :install
 end
 
-# include_recipe "tomcat::default"
-# include_recipe "mysql"
-# include_recipe "mysql::server"
+# create a mysql database
+mysql_database 'oracle_rules' do
+  connection ({:host => "localhost", :username => 'root', :password => node['mysql']['server_root_password']})
+  action :create
+end
 
-# install git for source control
-# package "git-core"
-package "vim"
-
-# if !File.exists?("/tmp/railo-#{node[:railo_version]}-jars.tar.gz")
-
-  # Download Railo JARs (http://www.getrailo.org/index.cfm/download/)
-  remote_file "/tmp/railo-#{node[:railo_version]}-jars.tar.gz" do
-    source "http://www.getrailo.org/railo/remote/download/#{node[:railo_version]}/custom/all/railo-#{node[:railo_version]}-jars.tar.gz"
-    action :create_if_missing
-    mode "0744"
-    owner "root"
-    group "root"
-  end
+# Download Railo JARs (http://www.getrailo.org/index.cfm/download/)
+remote_file "/tmp/railo-#{node[:railo_version]}-jars.tar.gz" do
+  source "http://www.getrailo.org/railo/remote/download/#{node[:railo_version]}/custom/all/railo-#{node[:railo_version]}-jars.tar.gz"
+  action :create_if_missing
+  mode "0744"
+  owner "root"
+  group "root"
+end
     
-  # untar it
-  execute "tar xvzf railo-#{node[:railo_version]}-jars.tar.gz" do
-    creates "railo-#{node[:railo_version]}-jars"
-    action :run
-    user "root"
-    cwd "/tmp"
-  end
+# untar it
+execute "tar xvzf railo-#{node[:railo_version]}-jars.tar.gz" do
+  creates "railo-#{node[:railo_version]}-jars"
+  action :run
+  user "root"
+  cwd "/tmp"
+end
 
-  # set jar permissions
-  execute "chown #{node[:tomcat_version]}:#{node[:tomcat_version]} . -R" do
-    action :run
-    user "root"
-    cwd "/tmp/railo-#{node[:railo_version]}-jars"
-  end
+# set jar permissions
+execute "chown tomcat#{node[:tomcat_version]}:tomcat#{node[:tomcat_version]} . -R" do
+  action :run
+  user "root"
+  cwd "/tmp/railo-#{node[:railo_version]}-jars"
+end
 
-  # move jars to tomcat
-  execute "mv * /var/lib/#{node[:tomcat_version]}/common" do
-    action :run
-    creates "/var/lib/#{node[:tomcat_version]}/common/railo.jar"
-    user "root"
-    cwd "/tmp/railo-#{node[:railo_version]}-jars"
-  end
-# end
+# move jars to tomcat
+execute "mv * /var/lib/tomcat#{node[:tomcat_version]}/common" do
+  action :run
+  creates "/var/lib/tomcat#{node[:tomcat_version]}/common/railo.jar"
+  user "root"
+  cwd "/tmp/railo-#{node[:railo_version]}-jars"
+end
 
 # update Tomcat web.xml
-template "/var/lib/#{node[:tomcat_version]}/conf/web.xml" do
+template "/var/lib/tomcat#{node[:tomcat_version]}/conf/web.xml" do
    source "web.xml.erb"
    mode 0644
    owner "root"
-   group "#{node[:tomcat_version]}"
+   group "tomcat#{node[:tomcat_version]}"
 end
 
-service "#{node[:tomcat_version]}" do
+service "tomcat#{node[:tomcat_version]}" do
   action [:enable, :start]
 end
 
@@ -101,11 +123,11 @@ template "/etc/hosts" do
 end
 
 # copy server.xml
-template "/var/lib/#{node[:tomcat_version]}/conf/server.xml" do
+template "/var/lib/tomcat#{node[:tomcat_version]}/conf/server.xml" do
    source "server.xml.erb"
    mode 0644
    owner "root"
-   group "#{node[:tomcat_version]}"
+   group "tomcat#{node[:tomcat_version]}"
 end
 
 # restart Apache
@@ -114,7 +136,7 @@ service "apache2" do
 end
 
 # restart Tomcat
-service "#{node[:tomcat_version]}" do
+service "tomcat#{node[:tomcat_version]}" do
   action :restart
 end
 

@@ -15,6 +15,8 @@ This project uses Vagrant + Chef to create a VM with the following:
 
 * Ubuntu 12.04 LTS
 * Tomcat
+* Apache
+* MySQL
 * Railo (currently 3.3)
 * shared folder inside of your VM for developing your code
 
@@ -25,29 +27,41 @@ This uses a very basic Chef recipe (Chef recipes are written in Ruby). Some cave
 * It's a JAR-based deployment for Railo
 * The Linux file permissions could possibly be tweaked 
 * Designed for Ubuntu (though _should_ work for other distros)
+
+Configure Host
+--------------
 * Doesn't configure your "hosts" file on host machine, since this could theoretically be run on Windows, Mac, or Linux. For the default settings, you'd change your hosts file (/etc/hosts or c:\windows\system32\drivers\etc\hosts):
 
-    192.168.33.10	testrailo.dev
+```
+192.168.33.10	testrailo.dev
+```
 
 Running it
 ----------
-This downloads the Ubuntu instance (only the first time), apt-get installs Tomcat, downloads and extracts Railo, configures Tomcat and Railo with defaults, and gives you a bare-bones index.cfm.
+ - downloads the Ubuntu instance (only the first time)
+ - installs Tomcat, Apache, MySQL, VIM and GIT
+ - downloads and extracts Railo
+ - creates up a MySQL database called oracle_rules
+ - configures Tomcat, Apache and Railo with defaults, and gives you a bare-bones index.cfm.
 
-    $ git clone git@github.com:bdcravens/railo-vagrant.git
-    $ cd railo-vagrant
-    $ vagrant up 
-
-After it starts, verify it runs by opening http://testrailo.dev:8080. You should see a cfdump of server scope. (Note: you'll need to set up the hosts entry as above first, or whatever you've changed the values to in Vagrantfile and/or your attributes file)
+```
+$ git clone git@github.com:bdcravens/railo-vagrant.git
+$ cd railo-vagrant
+$ git submodule init
+$ git submodule update
+$ vagrant up 
+```
+After it starts, verify it runs by opening ```http://testrailo.dev```. You should see a cfdump of server scope. (Note: you'll need to set up the hosts entry as above first, or whatever you've changed the values to in Vagrantfile and/or your attributes file)
 
 Railo Version
 -------------
-Originally written to load Railo 3.3.x. If you want to run Railo 4.0, rename cookbooks/main/recipes/default.rb to default.rb.old and rename railo4.rb to default.rb. (Modularizing this and making it easy to select version is a TODO)
+Originally written to load Railo 3.3.x. If you want to run Railo 4.0, rename ```cookbooks/main/recipes/default.rb``` to ```default.rb.old``` and rename ```railo4.rb``` to ```default.rb```. (Modularizing this and making it easy to select version is a TODO)
 
 Making Changes
 --------------
-See cookbooks/attributes/default.rb (Yes, it's Ruby. You'll be fine.) If you want to perform more Tomcat or Railo config changes, see the respective files (server.xml.rb, web.xml.rb, or _admin.cfm.rb) in cookbooks/templates/default
+See ```cookbooks/attributes/default.rb``` (Yes, it's Ruby. You'll be fine.) If you want to perform more Tomcat or Railo config changes, see the respective files (server.xml.rb, web.xml.rb, or _admin.cfm.rb) in cookbooks/templates/default
 
-You will want to empty out the code directory (including WEB-INF) if you make any changes to the index.cfm or admin.cfm templates. To restart without redownloading things like Railo and Tomcat:
+You will want to empty out the code directory (including ```WEB-INF```) if you make any changes to the ```index.cfm``` or ```admin.cfm``` templates. To restart without redownloading things like Railo and Tomcat:
 
     $ vagrant reload
 
@@ -56,9 +70,16 @@ To start over from scratch:
     $ vagrant destroy
     $ vagrant up
 
-Railo Admin
+Railo Administration location
+-----------------------------
+Usual location
+ - http://testrailo.dev/railo-context/admin/server.cfm
+ - http://testrailo.dev/railo-context/admin/web.cfm
+
+Passwords
 -----------
-Usual location (http://testrailo.dev:8080/railo-context/admin/server.cfm or web.cfm). Passwords: in cookbooks/attributes/default.rb (defaults to railoserver and railoweb)
+ - Railo passwords in cookbooks/attributes/default.rb (defaults to ```railoserver``` and ```railoweb```)
+ - MySQL password in node.jon (defaults to ```raildb``` for ```root```)
 
 Hey Billy, you're an idiot because you ….
 -----------------------------------------
@@ -76,15 +97,14 @@ Error Resolution
     or `nfsd` may not be installed. Please verify that `nfsd` is installed
     on your machine, and retry.
 ### resolution
+#### linux
     $ sudo apt-get install nfs-kernel-server
 
-### error
-    The VM failed to remain in the "running" state while attempting to boot.
-    This is normally caused by a misconfiguration or host system incompatibilities.
-    Please open the VirtualBox GUI and attempt to boot the virtual machine
-    manually to get a more informative error message.
-### resolution
-    not resolved
+#### windows
+Change the vagrantfile so you use virtualbox's shared folders instead of nfs, by setting nfs=>false:
+config.vm.share_folder "blah", "~/blah", ".", :extra => 'dmode=755,fmode=644', :nfs => false
+    
+http://devblog.alexsapps.com/2012/11/solution-to-vagrant-up-host-class-is.html
 
 Special thanks to ….
 --------------------
