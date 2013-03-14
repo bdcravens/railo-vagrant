@@ -15,6 +15,8 @@ This project uses Vagrant + Chef to create a VM with the following:
 
 * Ubuntu 12.04 LTS
 * Tomcat
+* Apache
+* MySQL
 * Railo (currently 3.3)
 * shared folder inside of your VM for developing your code
 
@@ -36,7 +38,11 @@ Configure Host
 
 Running it
 ----------
-This downloads the Ubuntu instance (only the first time), apt-get installs Tomcat, downloads and extracts Railo, configures Tomcat and Railo with defaults, and gives you a bare-bones index.cfm.
+ - downloads the Ubuntu instance (only the first time)
+ - installs Tomcat, Apache, MySQL, VIM and GIT
+ - downloads and extracts Railo
+ - creates up a MySQL database called oracle_rules
+ - configures Tomcat, Apache and Railo with defaults, and gives you a bare-bones index.cfm.
 
     $ git clone git@github.com:bdcravens/railo-vagrant.git
     $ git submodule init
@@ -63,10 +69,16 @@ To start over from scratch:
     $ vagrant destroy
     $ vagrant up
 
-Railo Admin
+Railo Administration location
+-----------------------------
+Usual location
+ - http://testrailo.dev/railo-context/admin/server.cfm
+ - http://testrailo.dev/railo-context/admin/web.cfm
+
+Passwords
 -----------
-Usual location (http://testrailo.dev/railo-context/admin/server.cfm or web.cfm). 
- - Passwords: in cookbooks/attributes/default.rb (defaults to railoserver and railoweb)
+ - Railo passwords in cookbooks/attributes/default.rb (defaults to ```railoserver``` and ```railoweb```)
+ - MySQL password in node.jon (defaults to ```raildb``` for ```root```)
 
 Hey Billy, you're an idiot because you ….
 -----------------------------------------
