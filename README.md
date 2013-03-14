@@ -46,9 +46,9 @@ Running it
 
 ```
 $ git clone git@github.com:bdcravens/railo-vagrant.git
+$ cd railo-vagrant
 $ git submodule init
 $ git submodule update
-$ cd railo-vagrant
 $ vagrant up 
 ```
 After it starts, verify it runs by opening ```http://testrailo.dev```. You should see a cfdump of server scope. (Note: you'll need to set up the hosts entry as above first, or whatever you've changed the values to in Vagrantfile and/or your attributes file)
