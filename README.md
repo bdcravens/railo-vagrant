@@ -44,23 +44,24 @@ Running it
  - creates up a MySQL database called oracle_rules
  - configures Tomcat, Apache and Railo with defaults, and gives you a bare-bones index.cfm.
 
-    $ git clone git@github.com:bdcravens/railo-vagrant.git
-    $ git submodule init
-    $ git submodule update
-    $ cd railo-vagrant
-    $ vagrant up 
-
-After it starts, verify it runs by opening http://testrailo.dev . You should see a cfdump of server scope. (Note: you'll need to set up the hosts entry as above first, or whatever you've changed the values to in Vagrantfile and/or your attributes file)
+```
+$ git clone git@github.com:bdcravens/railo-vagrant.git
+$ git submodule init
+$ git submodule update
+$ cd railo-vagrant
+$ vagrant up 
+```
+After it starts, verify it runs by opening ```http://testrailo.dev```. You should see a cfdump of server scope. (Note: you'll need to set up the hosts entry as above first, or whatever you've changed the values to in Vagrantfile and/or your attributes file)
 
 Railo Version
 -------------
-Originally written to load Railo 3.3.x. If you want to run Railo 4.0, rename cookbooks/main/recipes/default.rb to default.rb.old and rename railo4.rb to default.rb. (Modularizing this and making it easy to select version is a TODO)
+Originally written to load Railo 3.3.x. If you want to run Railo 4.0, rename ```cookbooks/main/recipes/default.rb``` to ```default.rb.old``` and rename ```railo4.rb``` to ```default.rb```. (Modularizing this and making it easy to select version is a TODO)
 
 Making Changes
 --------------
-See cookbooks/attributes/default.rb (Yes, it's Ruby. You'll be fine.) If you want to perform more Tomcat or Railo config changes, see the respective files (server.xml.rb, web.xml.rb, or _admin.cfm.rb) in cookbooks/templates/default
+See ```cookbooks/attributes/default.rb``` (Yes, it's Ruby. You'll be fine.) If you want to perform more Tomcat or Railo config changes, see the respective files (server.xml.rb, web.xml.rb, or _admin.cfm.rb) in cookbooks/templates/default
 
-You will want to empty out the code directory (including WEB-INF) if you make any changes to the index.cfm or admin.cfm templates. To restart without redownloading things like Railo and Tomcat:
+You will want to empty out the code directory (including ```WEB-INF```) if you make any changes to the ```index.cfm``` or ```admin.cfm``` templates. To restart without redownloading things like Railo and Tomcat:
 
     $ vagrant reload
 
