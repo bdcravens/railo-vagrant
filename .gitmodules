@@ -1,0 +1,33 @@
+[submodule "cookbooks/java"]
+	path = cookbooks/java
+	url = https://github.com/opscode-cookbooks/java.git
+[submodule "cookbooks/apache2"]
+	path = cookbooks/apache2
+	url = https://github.com/opscode-cookbooks/apache2.git
+[submodule "cookbooks/mysql"]
+	path = cookbooks/mysql
+	url = https://github.com/opscode-cookbooks/mysql.git
+[submodule "cookbooks/tomcat"]
+	path = cookbooks/tomcat
+	url = https://github.com/opscode-cookbooks/tomcat.git
+[submodule "cookbooks/openssl"]
+	path = cookbooks/openssl
+	url = https://github.com/opscode-cookbooks/openssl.git
+[submodule "cookbooks/build-essential"]
+	path = cookbooks/build-essential
+	url = https://github.com/opscode-cookbooks/build-essential.git
+[submodule "cookbooks/vim"]
+	path = cookbooks/vim
+	url = https://github.com/opscode-cookbooks/vim.git
+[submodule "cookbooks/git"]
+	path = cookbooks/git
+	url = https://github.com/opscode-cookbooks/git.git
+[submodule "cookbooks/database"]
+	path = cookbooks/database
+	url = https://github.com/opscode-cookbooks/database.git
+[submodule "cookbooks/nfs"]
+	path = cookbooks/nfs
+	url = https://github.com/atomic-penguin/cookbook-nfs.git
+[submodule "cookbooks/line"]
+	path = cookbooks/line
+	url = https://github.com/someara/line-cookbook.git
