@@ -79,7 +79,7 @@ Usual location
 Passwords
 -----------
  - Railo passwords in cookbooks/attributes/default.rb (defaults to ```railoserver``` and ```railoweb```)
- - MySQL password in node.jon (defaults to ```raildb``` for ```root```)
+ - MySQL password in node.json (defaults to ```railodb``` for ```root```)
 
 Hey Billy, you're an idiot because you ….
 -----------------------------------------
