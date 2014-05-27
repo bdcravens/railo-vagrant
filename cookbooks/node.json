@@ -1,6 +1,6 @@
 {
 	"tomcat_version": ["7"]
-	, "railo_version": ["4.0.4.001"]
+	, "railo_version": ["4.2.1.000"]
 	, "mysql": {
     "server_root_password": "railodb",
     "server_repl_password": "railodb",
