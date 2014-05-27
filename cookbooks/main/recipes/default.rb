@@ -55,7 +55,7 @@ end
 
 # Download Railo JARs (http://www.getrailo.org/index.cfm/download/)
 remote_file "/tmp/railo-#{node[:railo_version]}-jars.tar.gz" do
-  source "http://www.getrailo.org/railo/remote/download/#{node[:railo_version]}/custom/all/railo-#{node[:railo_version]}-jars.tar.gz"
+  source "http://www.getrailo.org/railo/remote/download42/#{node[:railo_version]}/custom/all/railo-#{node[:railo_version]}-jars.tar.gz"
   action :create_if_missing
   mode "0744"
   owner "root"
