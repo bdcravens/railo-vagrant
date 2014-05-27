@@ -65,4 +65,7 @@ Vagrant::Config.run do |config|
   # https://github.com/mitchellh/vagrant/issues/713
   # config.vm.customize ["setextradata", :id, "VBoxInternal2/SharedFoldersEnableSymlinksCreate/v-root", "1"]
 
+  # uncomment these two lines for more memory and more cpu power
+  #config.vm.customize ["modifyvm", :id, "--memory", 4096]
+  #config.vm.customize ["modifyvm", :id, "--cpus", 4]
 end
